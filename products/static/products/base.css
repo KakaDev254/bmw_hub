@@ -1,112 +1,109 @@
-/* === Global Reset & Transitions === */
+/* Reset some basic styles */
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  line-height: 1.6;
+  background-color: #f8f9fa;
+}
+header {
+  background-color: #f8f9fa;
+}
+/* Logo and brand */
+header .fw-bold {
+  font-size: 1.25rem;
+  color: #000;
 }
 
-a,
-button {
-  transition: all 0.3s ease-in-out;
+/* Top header nav links */
+header ul.nav {
+  flex-direction: row;
+  gap: 0.5rem;
 }
 
-a:hover,
-button:hover {
-  opacity: 0.85;
+@media (max-width: 991px) {
+  header ul.nav {
+    flex-direction: column;
+    background: #f8f9fa;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    z-index: 999;
+    display: none;
+  }
+
+  header ul.nav.show {
+    display: flex;
+  }
+
+  .navbar-toggler {
+    display: block !important;
+  }
 }
 
-/* === Top Header === */
-header img {
-  max-height: 60px;
+/* Navbar (search bar section) */
+nav.navbar {
+  background-color: #dc3545 !important; /* Bootstrap danger red */
 }
 
-header .nav-link {
-  color: #333;
-  font-weight: 500;
+nav input.form-control {
+  max-width: 250px;
+}
+
+nav .form-select {
+  max-width: 150px;
+  font-size: 0.9rem;
+}
+
+/* Nav icons */
+.navbar-nav .nav-link {
+  font-size: 1.2rem;
   position: relative;
 }
 
-header .nav-link::after {
-  content: "";
-  position: absolute;
-  width: 0%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: #0d6efd;
-  transition: width 0.3s;
+/* Badge styling for cart */
+.navbar-nav .badge {
+  font-size: 0.6rem;
+  padding: 0.4em 0.5em;
 }
 
-header .nav-link:hover::after {
-  width: 100%;
+/* Footer */
+footer {
+  font-size: 0.9rem;
 }
 
-/* === Navbar === */
-.navbar {
-  background-color: #d90429 !important;
-  animation: slideDown 0.6s ease-in-out;
-}
-
-.navbar input.form-control {
-  border-radius: 25px 0 0 25px;
-  padding-left: 20px;
-}
-
-.navbar .btn {
-  border-radius: 25px;
-}
-
-.navbar .badge {
-  font-size: 0.75rem;
-  padding: 0.4em 0.65em;
-}
-/* === Footer === */
-.footer {
-  background-color: #1c1c1c;
-  color: white;
-  padding: 2rem 0;
-}
-
-.footer a {
-  color: #fff;
-  margin: 0 0.5rem;
+footer i {
   font-size: 1.2rem;
 }
 
-.footer a:hover {
-  color: #0d6efd;
-  transform: scale(1.1);
+/* Collapse menu button styling (hamburger) */
+.navbar-toggler {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  color: white;
+  display: none;
 }
-@keyframes slideDown {
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@media (max-width: 768px) {
-  header .container-fluid,
-  .navbar .container-fluid {
-    flex-direction: column;
-    align-items: start;
+
+@media (max-width: 991px) {
+  .navbar-toggler {
+    display: block;
   }
 
-  header .nav {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .footer a {
-    font-size: 1rem;
+  header .container-fluid {
+    position: relative;
   }
 }
 
-@media (max-width: 576px) {
-  .navbar .nav-link {
-    font-size: 1rem;
-  }
+/* Ensure image responsiveness */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom spacing */
+.py-2,
+.py-4,
+.py-5 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
