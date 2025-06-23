@@ -1,0 +1,94 @@
+{% extends 'products/base.html' %} {% load static %} {% block title %}Home |
+BMWPartsHub{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'products/home.css' %}" />
+{% endblock %} {% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content text-center">
+    <h1 class="display-4 fw-bold">Genuine BMW Spare Parts</h1>
+    <p class="lead">Keep your Ultimate Driving Machine running like new</p>
+    <a href="{% url 'shop' %}" class="btn btn-primary btn-lg">Shop Now</a>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Browse By Category</h2>
+    <div class="row text-center">
+      <div class="col-md-3 mb-4">
+        <i class="bx bx-cog category-icon"></i>
+        <h5>Engine</h5>
+      </div>
+      <div class="col-md-3 mb-4">
+        <i class="bx bx-car category-icon"></i>
+        <h5>Suspension</h5>
+      </div>
+      <div class="col-md-3 mb-4">
+        <i class="bx bx-disc category-icon"></i>
+        <h5>Brakes</h5>
+      </div>
+      <div class="col-md-3 mb-4">
+        <i class="bx bx-tachometer category-icon"></i>
+        <h5>Interior</h5>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Featured Products</h2>
+    <div class="row">
+      {% for product in featured_products %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          {% if product.image %}
+          <img
+            src="{{ product.image.url }}"
+            class="card-img-top"
+            alt="{{ product.name }}"
+          />
+          {% else %}
+          <img
+            src="{% static 'products/images/placeholder.jpg' %}"
+            class="card-img-top"
+            alt="No image"
+          />
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="text-muted small">
+              {{ product.description|truncatewords:15 }}
+            </p>
+            <div class="mt-auto">
+              <p class="fw-bold">KSh {{ product.price|floatformat:2 }}</p>
+              <a
+                href="{{ product.get_absolute_url }}"
+                class="btn btn-outline-primary btn-sm"
+                >View Product</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No featured products available.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5 text-center bg-dark text-white">
+  <div class="container">
+    <h2>Why Choose BMWPartsHub?</h2>
+    <p class="lead mt-3">
+      We offer 100% genuine parts, fast shipping, and expert support.
+    </p>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'products/base.html' %} {% load static %} {% block title %}Login |
+BMWPartsHub{% endblock %} {% block extra_css %}
+<style>
+  .login-container {
+    max-width: 450px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .login-container h2 {
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+
+  .login-icon {
+    font-size: 3rem;
+    color: #0d6efd;
+    text-align: center;
+    display: block;
+    margin-bottom: 1rem;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="login-container">
+    <div class="login-icon">
+      <i class="bx bx-user-circle"></i>
+    </div>
+    <h2>Login to Your Account</h2>
+
+    <form method="POST">
+      {% csrf_token %} {% if form.errors %}
+      <div class="alert alert-danger">
+        Invalid username or password. Please try again.
+      </div>
+      {% endif %}
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="form-control"
+          placeholder="Enter your username"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="form-control"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-dark">Login</button>
+      </div>
+    </form>
+
+    <p class="mt-3 text-center">
+      Don't have an account?
+      <a href="{% url 'register' %}">Register</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

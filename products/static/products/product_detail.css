@@ -1,0 +1,10 @@
+.product-main-img {
+  transition: transform 0.3s ease;
+}
+.product-main-img:hover {
+  transform: scale(1.02);
+}
+.img-thumbnail:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}

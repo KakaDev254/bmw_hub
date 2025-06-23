@@ -1,0 +1,91 @@
+{% extends 'products/base.html' %} {% load static %} {% block title %}{{
+product.name }} | BMWPartsHub{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'products/product_detail.css' %}" />
+{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row g-5 align-items-start">
+    <!-- Product Images -->
+    <div class="col-md-6">
+      {% if product.image %}
+      <img
+        src="{{ product.image.url }}"
+        class="card-img-top"
+        alt="{{ product.name }}"
+      />
+      {% else %}
+      <img
+        src="{% static 'products/images/placeholder.jpg' %}"
+        class="card-img-top"
+        alt="No image"
+      />
+      {% endif %} {% if product.additional_images %}
+      <div class="d-flex flex-wrap gap-2 mt-3">
+        <img
+          src="{{ product.additional_images.url }}"
+          class="img-thumbnail"
+          style="
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            transition: 0.3s;
+          "
+          alt="Additional image"
+        />
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Product Info -->
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ product.name }}</h2>
+      <p class="text-muted mb-1">Category: {{ product.category.name }}</p>
+      <h4 class="text-danger mb-3">KSh {{ product.price|floatformat:2 }}</h4>
+
+      <p class="mb-4">{{ product.description }}</p>
+
+      <!-- Quantity + Add to Cart -->
+      <form method="POST" action="{% url 'add_to_cart' product.id %}">
+        {% csrf_token %}
+        <div class="d-flex align-items-center">
+          <input
+            type="number"
+            name="quantity"
+            value="1"
+            min="1"
+            class="form-control w-25 me-3"
+          />
+          <button type="submit" class="btn btn-dark">
+            <i class="bx bx-cart me-1"></i> Add to Cart
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Product Specifications -->
+  <div class="mt-5">
+    <h4 class="mb-3">Specifications</h4>
+    <ul class="list-group list-group-flush">
+      {% if product.brand %}
+      <li class="list-group-item">
+        🔧 <strong>Brand:</strong> {{ product.brand }}
+      </li>
+      {% endif %} {% if product.weight %}
+      <li class="list-group-item">
+        ⚖️ <strong>Weight:</strong> {{ product.weight }} kg
+      </li>
+      {% endif %} {% if product.warranty %}
+      <li class="list-group-item">
+        📄 <strong>Warranty:</strong> {{ product.warranty }}
+      </li>
+      {% endif %}
+      <li class="list-group-item">
+        🆔 <strong>SKU:</strong> {{ product.slug|upper }}
+      </li>
+      <li class="list-group-item">
+        🗓️ <strong>Added:</strong> {{ product.created_at|date:"M d, Y" }}
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

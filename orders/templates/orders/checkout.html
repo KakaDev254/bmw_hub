@@ -1,0 +1,53 @@
+{% extends 'products/base.html' %} {% load static %} {% load widget_tweaks %}
+{%block title %} Checkout | BMWPartsHub{% endblock %} {% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-5 fw-bold">Checkout</h2>
+
+  <form method="POST" class="bg-light p-4 rounded shadow-sm">
+    {% csrf_token %}
+    <div class="row">
+      <!-- Billing Info -->
+      <div class="col-md-6">
+        <h4 class="mb-3">Billing Information</h4>
+        {% for field in form %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label fw-semibold"
+            >{{ field.label }}</label
+          >
+          {% render_field field class="form-control" %} {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-md-6">
+        <h4 class="mb-3">Order Summary</h4>
+        <ul class="list-group mb-4">
+          {% for item in cart.items.all %}
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div>
+              {{ item.product.name }}
+              <span class="badge bg-secondary ms-2">x{{ item.quantity }}</span>
+            </div>
+            <strong>KSh {{ item.get_subtotal }}</strong>
+          </li>
+          {% endfor %}
+          <li
+            class="list-group-item d-flex justify-content-between fw-bold fs-5"
+          >
+            <span>Total:</span>
+            <span class="text-success">KSh {{ cart.get_total }}</span>
+          </li>
+        </ul>
+        <button type="submit" class="btn btn-success w-100 py-2 fs-5">
+          <i class="bx bx-check-circle me-2"></i>Place Order
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

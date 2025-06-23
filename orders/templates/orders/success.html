@@ -1,0 +1,7 @@
+{% extends 'products/base.html' %} {% block content %}
+<div class="container py-5 text-center">
+  <h2>Thank you for your order!</h2>
+  <p>Your order number is <strong>#{{ order_id }}</strong></p>
+  <a href="{% url 'shop' %}" class="btn btn-dark mt-3">Continue Shopping</a>
+</div>
+{% endblock %}

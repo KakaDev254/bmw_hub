@@ -1,0 +1,154 @@
+{% extends 'products/base.html' %} {% load static %} {% block title %}Your Cart
+| BMWPartsHub{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'cart/cart.css' %}" />
+{% endblock %} {% block content %}
+<div class="container py-5">
+  <h2 class="mb-4 text-center">Your Shopping Cart</h2>
+
+  {% if messages %}
+  <div class="mb-4">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %} {% if cart.items.all %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+          <th scope="col">Qty</th>
+          <th scope="col">Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.items.all %}
+        <tr id="cart-item-{{ item.id }}">
+          <td>
+            <div class="d-flex align-items-center">
+              {% if item.product.image %}
+              <img
+                src="{{ item.product.image.url }}"
+                alt="{{ item.product.name }}"
+                class="img-thumbnail me-3"
+                style="width: 80px; height: auto"
+              />
+              {% endif %}
+              <div>
+                <h6 class="mb-0">{{ item.product.name }}</h6>
+                <small class="text-muted"
+                  >{{ item.product.category.name }}</small
+                >
+              </div>
+            </div>
+          </td>
+          <td>KSh {{ item.product.price }}</td>
+          <td>
+            <form
+              class="update-quantity-form d-flex align-items-center"
+              data-item-id="{{ item.id }}"
+            >
+              {% csrf_token %}
+              <input
+                type="number"
+                name="quantity"
+                value="{{ item.quantity }}"
+                min="1"
+                class="form-control form-control-sm w-50 me-2 quantity-input"
+              />
+              <button type="submit" class="btn btn-sm btn-outline-secondary">
+                Update
+              </button>
+            </form>
+          </td>
+          <td id="subtotal-{{ item.id }}">KSh {{ item.get_subtotal }}</td>
+          <td>
+            <a
+              href="{% url 'remove_from_cart' item.id %}"
+              class="btn btn-sm btn-outline-danger"
+              >Remove</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Cart Totals -->
+  <div class="text-end mt-4">
+    <h5>Total: <strong id="cart-total">KSh {{ cart.get_total }}</strong></h5>
+    <a href="{% url 'checkout' %}" class="btn btn-dark mt-2"
+      >Proceed to Checkout</a
+    >
+  </div>
+
+  {% else %}
+  <div class="text-center">
+    <p class="lead">Your cart is currently empty.</p>
+    <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".update-quantity-form").forEach((form) => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const itemId = this.dataset.itemId;
+        const quantity = this.querySelector(".quantity-input").value;
+        const csrfToken = this.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        fetch(`/cart/ajax/update/${itemId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `quantity=${quantity}`,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "success") {
+              document.getElementById(
+                `subtotal-${itemId}`
+              ).textContent = `KSh ${data.subtotal.toFixed(2)}`;
+              document.getElementById(
+                "cart-total"
+              ).textContent = `KSh ${data.total.toFixed(2)}`;
+            } else if (data.status === "removed") {
+              document.getElementById(`cart-item-${itemId}`).remove();
+              document.getElementById(
+                "cart-total"
+              ).textContent = `KSh ${data.total.toFixed(2)}`;
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch((err) => {
+            console.error("AJAX error:", err);
+            alert("Failed to update item.");
+          });
+      });
+    });
+  });
+</script>
+{% endblock %}

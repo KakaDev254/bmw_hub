@@ -1,0 +1,129 @@
+/* === Hero Section === */
+.hero {
+  background: url("images/bmw-hero.jpg") no-repeat center center/cover;
+  position: relative;
+  padding: 6rem 1rem;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 1.2s ease-out;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 1s ease-out;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin: 1rem 0;
+}
+
+.hero a.btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* === Categories Section === */
+.category-icon {
+  font-size: 3rem;
+  color: #0d6efd;
+  margin-bottom: 0.5rem;
+  transition: transform 0.3s;
+}
+
+.category-icon:hover {
+  transform: scale(1.2);
+}
+
+/* === Featured Products Section === */
+.card {
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.card-text {
+  font-size: 0.95rem;
+}
+
+/* === Why Choose Us Section === */
+.bg-dark h2 {
+  font-weight: 600;
+}
+
+.bg-dark p {
+  font-size: 1.1rem;
+  animation: fadeIn 1.5s ease-out;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+/* === Responsive Media Queries === */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .card img {
+    height: 160px;
+  }
+}
+
+@media (max-width: 576px) {
+  .category-icon {
+    font-size: 2.5rem;
+  }
+}
