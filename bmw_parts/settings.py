@@ -18,11 +18,10 @@ SECRET_KEY =os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =os.getenv("DEBUG")
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'e836-41-90-211-161.ngrok-free.app',  # <-- your current ngrok domain
-]
+
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+
 
 CSRF_TRUSTED_ORIGINS = [
     'https://e836-41-90-211-161.ngrok-free.app',
