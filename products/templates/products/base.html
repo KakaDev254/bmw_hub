@@ -24,131 +24,105 @@
 
   <body class="d-flex flex-column min-vh-100">
     <!-- Header with Logo (Left) and Hamburger (Right) -->
-    <header class="bg-white border-bottom py-2">
-      <nav class="navbar navbar-expand-lg navbar-light container-fluid">
-        <div class="d-flex w-100 justify-content-between align-items-center">
-          <!-- Logo on the left -->
+    <header class="bg-white border-bottom shadow-sm py-2">
+      <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+          <!-- Logo -->
           <a
             class="navbar-brand d-flex align-items-center"
             href="{% url 'home' %}"
           >
             <img
               src="{% static 'products/images/x5.jpeg' %}"
-              alt="BMWPartsHub Logo"
-              style="height: 50px"
+              alt="BMW Logo"
               class="me-2"
+              style="height: 45px"
             />
-            <span class="fw-bold text-dark">BMWPartsHub</span>
+            <span class="fw-bold text-dark fs-5">BMWPartsHub</span>
           </a>
 
-          <!-- Hamburger toggle on the right -->
+          <!-- Toggler for mobile -->
           <button
             class="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#navbarContent"
-            aria-controls="navbarContent"
+            data-bs-target="#headerNavbar"
+            aria-controls="headerNavbar"
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-        </div>
 
-        <!-- Collapsible Menu -->
-        <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarContent">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'shop' %}">Shop</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'register' %}">Register</a>
-            </li>
-            {% endif %}
-          </ul>
+          <!-- Collapsible content -->
+          <div class="collapse navbar-collapse mt-3 mt-lg-0" id="headerNavbar">
+            <!-- Search Bar -->
+            <form class="d-flex flex-grow-1 mx-lg-3 my-2 my-lg-0" role="search">
+              <input
+                class="form-control rounded-start-pill shadow-sm border-0"
+                type="search"
+                placeholder="Search BMW Parts"
+                aria-label="Search"
+              />
+              <button class="btn btn-dark rounded-end-pill px-3" type="submit">
+                <i class="bx bx-search"></i>
+              </button>
+            </form>
+
+            <!-- Navigation Links -->
+            <ul class="navbar-nav ms-lg-3 me-auto">
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'shop' %}">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="#">Contact</a>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'logout' %}"
+                  >Logout</a
+                >
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'register' %}"
+                  >Register</a
+                >
+              </li>
+              {% endif %}
+            </ul>
+
+            <!-- Icons -->
+            <ul class="navbar-nav flex-row align-items-center">
+              <li class="nav-item mx-2">
+                <a class="nav-link text-dark" href="#">
+                  <i class="bx bx-user-circle fs-4"></i>
+                </a>
+              </li>
+              <li class="nav-item mx-2 position-relative">
+                <a class="nav-link text-dark" href="{% url 'view_cart' %}">
+                  <i class="bx bx-cart fs-4"></i>
+                  {% if cart_item_count %}
+                  <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm"
+                  >
+                    {{ cart_item_count }}
+                  </span>
+                  {% endif %}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
     </header>
-
-    <!-- Search Bar Section -->
-    <nav class="navbar navbar-expand-lg bg-danger py-2">
-      <div class="container-fluid">
-        <form class="d-flex flex-grow-1 align-items-center mx-3" role="search">
-          <input
-            class="form-control rounded-start-pill border-0"
-            type="search"
-            placeholder="Search for Products"
-            aria-label="Search"
-          />
-
-          <div
-            class="input-group-text border-0 bg-white rounded-0 rounded-end-pill text-muted"
-          >
-            <select
-              class="form-select border-0 bg-white text-muted"
-              style="width: 150px"
-            >
-              <option selected>All Categories</option>
-              {% for category in categories %}
-              <option>{{ category.name }}</option>
-              {% endfor %}
-            </select>
-            <button class="btn btn-dark rounded-pill ms-2" type="submit">
-              <i class="bx bx-search"></i>
-            </button>
-          </div>
-        </form>
-
-        <!-- Right Icons -->
-        <ul
-          class="navbar-nav ms-auto flex-row align-items-center me-3 mt-3 mt-lg-0"
-        >
-          <li class="nav-item mx-2">
-            <a class="nav-link text-white" href="#"
-              ><i class="bx bx-refresh"></i
-            ></a>
-          </li>
-          <li class="nav-item mx-2">
-            <a class="nav-link text-white" href="#"
-              ><i class="bx bx-heart"></i
-            ></a>
-          </li>
-          <li class="nav-item mx-2">
-            <a class="nav-link text-white" href="#"
-              ><i class="bx bx-user"></i
-            ></a>
-          </li>
-          <li class="nav-item mx-2 position-relative">
-            <a class="nav-link text-white" href="{% url 'view_cart' %}">
-              <i class="bx bx-cart"></i>
-              KSh {{ cart_total_price|default:"0" }}
-              <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark"
-              >
-                {{ cart_item_count|default:"0" }}
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
 
     <!-- Main Content Area -->
     <main class="flex-grow-1">{% block content %}{% endblock %}</main>

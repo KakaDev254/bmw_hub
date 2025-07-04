@@ -39,18 +39,25 @@ body {
 }
 
 /* FEATURED PRODUCTS */
+.product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
 .card-img-top {
-  height: 220px;
   object-fit: cover;
+  height: 200px;
 }
 
-.card-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.card p {
-  font-size: 0.95rem;
+@media (max-width: 576px) {
+  .card-img-top {
+    height: 180px;
+  }
 }
 
 /* WHY CHOOSE US */

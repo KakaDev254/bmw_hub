@@ -3,67 +3,24 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
 }
-header {
-  background-color: #f8f9fa;
-}
-/* Logo and brand */
-header .fw-bold {
-  font-size: 1.25rem;
-  color: #000;
-}
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: center;
+  }
 
-/* Top header nav links */
-header ul.nav {
-  flex-direction: row;
-  gap: 0.5rem;
-}
-
-@media (max-width: 991px) {
-  header ul.nav {
+  form[role="search"] {
     flex-direction: column;
-    background: #f8f9fa;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    z-index: 999;
-    display: none;
+    align-items: stretch;
   }
 
-  header ul.nav.show {
-    display: flex;
+  form[role="search"] input {
+    margin-bottom: 0.5rem;
+    border-radius: 30px;
   }
 
-  .navbar-toggler {
-    display: block !important;
+  form[role="search"] button {
+    border-radius: 30px;
   }
-}
-
-/* Navbar (search bar section) */
-nav.navbar {
-  background-color: #dc3545 !important; /* Bootstrap danger red */
-}
-
-nav input.form-control {
-  max-width: 250px;
-}
-
-nav .form-select {
-  max-width: 150px;
-  font-size: 0.9rem;
-}
-
-/* Nav icons */
-.navbar-nav .nav-link {
-  font-size: 1.2rem;
-  position: relative;
-}
-
-/* Badge styling for cart */
-.navbar-nav .badge {
-  font-size: 0.6rem;
-  padding: 0.4em 0.5em;
 }
 
 /* Footer */
@@ -73,37 +30,4 @@ footer {
 
 footer i {
   font-size: 1.2rem;
-}
-
-/* Collapse menu button styling (hamburger) */
-.navbar-toggler {
-  border: none;
-  background: transparent;
-  font-size: 1.5rem;
-  color: white;
-  display: none;
-}
-
-@media (max-width: 991px) {
-  .navbar-toggler {
-    display: block;
-  }
-
-  header .container-fluid {
-    position: relative;
-  }
-}
-
-/* Ensure image responsiveness */
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Custom spacing */
-.py-2,
-.py-4,
-.py-5 {
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
 }

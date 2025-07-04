@@ -1,10 +1,6 @@
-.product-main-img {
-  transition: transform 0.3s ease;
-}
-.product-main-img:hover {
-  transform: scale(1.02);
-}
-.img-thumbnail:hover {
-  transform: scale(1.1);
-  cursor: pointer;
+/* Optional: Better spacing & image scaling on small devices */
+@media (max-width: 576px) {
+  .form-control.w-25 {
+    width: 100% !important;
+  }
 }
