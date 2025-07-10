@@ -3,24 +3,33 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
 }
-@media (max-width: 768px) {
-  .navbar-nav {
-    text-align: center;
-  }
 
+@media (max-width: 991px) {
+  #headerNavbar .navbar-nav {
+    align-items: flex-start;
+  }
+}
+/* Mobile-specific tweaks */
+@media (max-width: 991px) {
   form[role="search"] {
     flex-direction: column;
-    align-items: stretch;
+    width: 100%;
   }
 
   form[role="search"] input {
+    width: 100%;
     margin-bottom: 0.5rem;
-    border-radius: 30px;
   }
 
   form[role="search"] button {
-    border-radius: 30px;
+    width: 100%;
   }
+}
+
+/*  Add transition for smooth UI */
+form[role="search"] input,
+form[role="search"] button {
+  transition: all 0.3s ease;
 }
 
 /* Footer */
