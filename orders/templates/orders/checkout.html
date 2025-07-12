@@ -1,34 +1,38 @@
-{% extends 'products/base.html' %} {% load static %} {% load widget_tweaks %}
-{%block title %} Checkout | BMWPartsHub{% endblock %} {% block content %}
+{% extends 'products/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} Checkout | BMWPartsHub {% endblock %}
+
+{% block content %}
 <div class="container py-5">
   <h2 class="text-center mb-5 fw-bold">Checkout</h2>
 
-  <form method="POST" class="bg-light p-4 rounded shadow-sm">
+  <form method="POST" class="bg-light p-4 rounded shadow-sm" id="checkout-form">
     {% csrf_token %}
     <div class="row">
       <!-- Billing Info -->
-      <div class="col-md-6">
+      <div class="col-lg-6 mb-4">
         <h4 class="mb-3">Billing Information</h4>
         {% for field in form %}
         <div class="mb-3">
-          <label for="{{ field.id_for_label }}" class="form-label fw-semibold"
-            >{{ field.label }}</label
-          >
-          {% render_field field class="form-control" %} {% if field.errors %}
+          <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+            {{ field.label }}
+          </label>
+          {% render_field field class="form-control" %}
+          {% if field.errors %}
           <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
           {% endif %}
         </div>
         {% endfor %}
       </div>
 
-      <!-- Order Summary -->
-      <div class="col-md-6">
+      <!-- Order Summary + M-Pesa -->
+      <div class="col-lg-6">
         <h4 class="mb-3">Order Summary</h4>
         <ul class="list-group mb-4">
           {% for item in cart.items.all %}
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
+          <li class="list-group-item d-flex justify-content-between align-items-center">
             <div>
               {{ item.product.name }}
               <span class="badge bg-secondary ms-2">x{{ item.quantity }}</span>
@@ -36,18 +40,128 @@
             <strong>KSh {{ item.get_subtotal }}</strong>
           </li>
           {% endfor %}
-          <li
-            class="list-group-item d-flex justify-content-between fw-bold fs-5"
-          >
+          <li class="list-group-item d-flex justify-content-between fw-bold fs-5">
             <span>Total:</span>
             <span class="text-success">KSh {{ cart.get_total }}</span>
           </li>
         </ul>
+
+        <!-- M-Pesa STK Push -->
+        <div class="mb-3">
+          <label for="mpesa-phone" class="form-label fw-semibold">
+            M-Pesa Phone Number
+          </label>
+          <input
+            type="tel"
+            id="mpesa-phone"
+            name="phone"
+            class="form-control"
+            placeholder="e.g. 254712345678"
+            required
+          />
+        </div>
+
+        <input type="hidden" name="amount" value="{{ cart.get_total }}" />
+
+        <!-- Spinner shown during request -->
+        <div id="mpesa-spinner" class="text-center my-3 d-none">
+          <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Processing...</span>
+          </div>
+          <p class="text-muted mt-2 small">Sending payment request to your phone...</p>
+        </div>
+
+        <!-- Submit Button -->
         <button type="submit" class="btn btn-success w-100 py-2 fs-5">
-          <i class="bx bx-check-circle me-2"></i>Place Order
+          <i class="bx bx-mobile me-2"></i> Pay with M-Pesa
         </button>
+
+        <p class="text-muted text-center mt-3 small">
+          You will receive a prompt on your phone to complete the payment.
+        </p>
       </div>
     </div>
   </form>
 </div>
+
+<!-- ✅ Success Modal -->
+<div
+  class="modal fade"
+  id="paymentSuccessModal"
+  tabindex="-1"
+  aria-labelledby="paymentSuccessLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-success">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="paymentSuccessLabel">
+          Payment Initiated Successfully
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="bx bx-check-circle text-success display-4 mb-3"></i>
+        <p class="mb-0">
+          An M-Pesa prompt has been sent to your phone. Please complete the payment to finalize your order.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a href="/orders/confirmation/" class="btn btn-success w-100">Continue</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.getElementById("checkout-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const phone = document.getElementById("mpesa-phone").value;
+    const amount = document.querySelector("input[name='amount']").value;
+    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    const spinner = document.getElementById("mpesa-spinner");
+    const submitBtn = this.querySelector("button[type='submit']");
+
+    spinner.classList.remove("d-none");
+    submitBtn.disabled = true;
+    submitBtn.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...';
+
+    fetch("/mpesa/stk-push/", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrfToken,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `phone=${phone}&amount=${amount}`,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        spinner.classList.add("d-none");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bx bx-mobile me-2"></i> Pay with M-Pesa';
+
+        if (data.ResponseCode === "0") {
+          const modal = new bootstrap.Modal(document.getElementById("paymentSuccessModal"));
+          modal.show();
+        } else {
+          alert("Payment failed: " + (data.errorMessage || "Try again."));
+        }
+      })
+      .catch((err) => {
+        spinner.classList.add("d-none");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bx bx-mobile me-2"></i> Pay with M-Pesa';
+        alert("Something went wrong. Please try again.");
+      });
+  });
+</script>
 {% endblock %}

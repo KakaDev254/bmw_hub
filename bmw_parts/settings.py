@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY =os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -33,13 +33,17 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split("
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://e836-41-90-211-161.ngrok-free.app',
+    'https://e8251d3cc292.ngrok-free.app',
 ]
 
 
-PESAPAL_CONSUMER_KEY = os.getenv("PESAPAL_CONSUMER_KEY")
-PESAPAL_CONSUMER_SECRET = os.getenv("PESAPAL_CONSUMER_SECRET")
-PESAPAL_CALLBACK_URL = os.getenv("PESAPAL_CALLBACK_URL")
+MPESA = {
+    "CONSUMER_KEY": os.getenv("MPESA_CONSUMER_KEY"),
+    "CONSUMER_SECRET": os.getenv("MPESA_CONSUMER_SECRET"),
+    "SHORTCODE": os.getenv("MPESA_SHORTCODE"),
+    "PASSKEY": os.getenv("MPESA_PASSKEY"),
+    "CALLBACK_URL": os.getenv("MPESA_CALLBACK_URL"),
+}
 
 
 # Application definition

@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import PesaPalPaymentView, pesapal_callback
+from . import views
 
 urlpatterns = [
-    path("pay/", PesaPalPaymentView.as_view(), name="pesapal_pay"),
-    path("callback/", pesapal_callback, name="pesapal_callback"),
+    path("stk-push/", views.stk_push, name="stk_push"),
+    path("callback/", views.mpesa_callback, name="mpesa_callback"),
 ]
