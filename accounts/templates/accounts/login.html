@@ -28,6 +28,20 @@ BMWPartsHub{% endblock %} {% block extra_css %}
     display: block;
     margin-bottom: 1rem;
   }
+
+  .forgot-password {
+    font-size: 0.9rem;
+    text-align: right;
+  }
+
+  .forgot-password a {
+    text-decoration: none;
+    color: #0d6efd;
+  }
+
+  .forgot-password a:hover {
+    text-decoration: underline;
+  }
 </style>
 {% endblock %} {% block content %}
 <div class="container py-5">
@@ -43,6 +57,7 @@ BMWPartsHub{% endblock %} {% block extra_css %}
         Invalid username or password. Please try again.
       </div>
       {% endif %}
+
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input
@@ -65,6 +80,9 @@ BMWPartsHub{% endblock %} {% block extra_css %}
           placeholder="Enter your password"
           required
         />
+        <div class="forgot-password mt-1">
+          <a href="{% url 'password_reset' %}">Forgot password?</a>
+        </div>
       </div>
 
       <div class="d-grid">
